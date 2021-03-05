@@ -8,13 +8,11 @@ import Tarefas from './Tarefas';
 // Importando o CSS para a pag
 import './Main.css';
 
-// a classe padrão de toda a pág, extendendo as propriedades de componentes
 export default class Main extends Component {
-  // todos os estados da pág
   state = {
-    novaTarefa: '', // tarefa que será adcionada
-    tarefas: [], // lista em que irá ficar todas as tarefas
-    index: -1, // indice que aparece que não aponta para lugar algum
+    novaTarefa: '',
+    tarefas: [],
+    index: -1,
   }
 
   componentDidMount() {
@@ -32,31 +30,24 @@ export default class Main extends Component {
 
     localStorage.setItem('tarefas', JSON.stringify(tarefas));
   }
-
-  // segurando o submit
   handleSubmit = (e) => {
     e.preventDefault();
-    const { tarefas, index } = this.state; // pegando o state das tarefas e do index
-    let { novaTarefa } = this.state; // pegando o state do novaTarefa
-    novaTarefa = novaTarefa.trim(); // cortando todo espaço antes e depois do novaTarefa
-
-    // se o "novaTarefa" for encontrado no "Tarefa", não adiciona nada a lista
+    const { tarefas, index } = this.state;
+    let { novaTarefa } = this.state;
+    novaTarefa = novaTarefa.trim();
     if (tarefas.indexOf(novaTarefa) !== -1) return;
-
-    // Copiando as tarefas pra uma nova constante chamada: novasTarefas
     const novasTarefas = [...tarefas];
 
-    if (index === -1) { // se o index que vai ser o campo de adicionar estiver sem nenhuma string
+    if (index === -1) {
       this.setState({
-        tarefas: [...novasTarefas, novaTarefa], // novasTarefas a novaTarefa
-        novaTarefa: '', // fica sem nada depois
+        tarefas: [...novasTarefas, novaTarefa],
+        novaTarefa: '',
       });
-    } else { // ao contrario, continue o mesmo
+    } else {
       novasTarefas[index] = novaTarefa;
-
       this.setState({
-        tarefas: [...novasTarefas], // e o novo estado será as tarefas com o "novasTarefas"
-        index: -1, // e o index volta a ser -1
+        tarefas: [...novasTarefas],
+        index: -1,
       });
     }
   }
@@ -65,38 +56,29 @@ export default class Main extends Component {
   handleChange = (e) => {
     this.setState(
       {
-        novaTarefa: e.target.value, // capturando o valor dentro do input
+        novaTarefa: e.target.value,
       },
     );
   }
 
-  // editando o item
-  handleEdit = (e, index) => { // pegando o evento e o indice
-    const { tarefas } = this.state; // capturando as tarefas
-
-    /* o "novaTarefa" (input) vai receber o "tarefa" e ao reescrever e apertar enter,
-     vai mudar esta tarefa */
+  handleEdit = (e, index) => {
+    const { tarefas } = this.state;
     this.setState({
       index,
       novaTarefa: tarefas[index],
     });
   }
 
-  // deletando os itens
-  handleDelete = (e, index) => { // capturando o indice
-    const { tarefas } = this.state; // criando constante com o array "tarefas"
-    // criando constante com o nome "novasTarefas" que recebe o array "tarefas"
+  handleDelete = (e, index) => {
+    const { tarefas } = this.state;
     const novasTarefas = [...tarefas];
-    novasTarefas.splice(index, 1); // excluindo o valor selecioando nos novasTarefas
+    novasTarefas.splice(index, 1);
 
     this.setState({
-      tarefas: [...novasTarefas], // Setando o estado atual das "tarefas"
+      tarefas: [...novasTarefas],
     });
   }
-
-  // renderizando a pág
   render() {
-    // setando o estado criado lá emcima na pág
     const { novaTarefa, tarefas } = this.state;
     return (
       <div className="main">
